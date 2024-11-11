@@ -8,7 +8,7 @@ WORKDIR /app
 COPY . .
 
 # Criar o arquivo .env dentro do container com a URL de conexão para o Docker
-RUN echo "# Para rodar no Docker (comente a linha que não for necessária)" > .env && \
+RUN echo "# Para rodar no Docker" > .env && \
     echo "DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres" >> .env
 
 # Instalar as dependências do projeto
