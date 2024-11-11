@@ -1,34 +1,21 @@
-# Use Python 3.10 como base
-FROM python:3.10
+# Usar a imagem oficial do Python
+FROM python:3.12-slim
 
-# Defina o diretório de trabalho dentro do container
+# Definir o diretório de trabalho
 WORKDIR /app
 
-# Copiar o arquivo de requisitos primeiro para aproveitar o cache do Docker
-COPY requirements.txt /app/
+# Copiar os arquivos do projeto para dentro do container
+COPY . .
 
-# Criar o ambiente virtual
-RUN python -m venv /opt/venv
+# Criar o arquivo .env dentro do container com a URL de conexão para o Docker
+RUN echo "# Para rodar no Docker (comente a linha que não for necessária)" > .env && \
+    echo "DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres" >> .env
 
-# Ativar o ambiente virtual
-ENV VIRTUAL_ENV=/opt/venv
-ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+# Instalar as dependências do projeto
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Instalar as dependências dentro do ambiente virtual
-RUN pip install --no-cache-dir -r /app/requirements.txt
-
-# Copiar o código da aplicação para o container
-COPY ./ /app/
-
-# Instalar o Uvicorn (servidor ASGI recomendado para FastAPI)
-RUN pip install uvicorn
-
-# Expor a porta 8000 para que o FastAPI esteja acessível
+# Expor a porta em que a aplicação vai rodar
 EXPOSE 8000
 
-# Comando para rodar a aplicação FastAPI com uvicorn
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
-
-
-
-
+# Comando para rodar o app
+CMD ["uvicorn", "app.main:app", "--reload", "--host", "0.0.0.0", "--port", "8000"]
