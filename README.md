@@ -8,24 +8,26 @@ docker-compose up
 ```
 
 ### Subindo o projeto via VS code para testes com modo debug ( *** APENAS PARA DESENVOLVIMENTO BACKEND *** )
-
-1°) Criando o banco de dados via docker:
-```
-docker run --name postgres-container -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=postgres -p 5432:5432 -d postgres
-```
-
-
-2°) Crie um ambiente virtual no Terminal do VS Code:
+Crie um ambiente virtual no Terminal do VS Code:
 ```
 python -m venv venv
 ```
+E depois ative o ambiente no CMD:
+```
+venv\Scripts\activate 
+```
 
-3°) E depois ative o ambiente no CMD:
+Instale as dependencias
 ```
-source venv/bin/activate
+pip install -r requirements.txt
 ```
-4°) E para rodar o projeto use:
+
+E para rodar o projeto use:
 ```
 uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
+Criando o banco de dados via docker: ( DETALHE NA PORTA DO HOST QUE FICOU 5433 )
+```
+docker run --name postgres-container -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=postgres -p 5433:5432 -d postgres
+```

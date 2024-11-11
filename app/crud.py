@@ -15,3 +15,10 @@ def create_user(db: Session, user: UserCreate):
 # Função para obter um usuário por username
 def get_user_by_username(db: Session, username: str):
     return db.query(User).filter(User.username == username).first()
+
+def save_fake_data(db: Session, username: str, role: str, data: dict):
+    db_data = UserData(username=username, role=role, data=data)
+    db.add(db_data)
+    db.commit()
+    db.refresh(db_data)
+    return db_data
